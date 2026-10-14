@@ -257,7 +257,7 @@ textarea{width:100%;min-height:70px;resize:vertical}
 .anim .pp{position:absolute;inset-block-end:8px;inset-inline-end:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:.7rem;display:none;place-items:center}
 .anim.paused *{animation-play-state:paused!important}
 .anim.paused .pp{display:grid}
-.anim.big{max-width:560px}
+.anim.big{max-width:560px;margin-inline:auto}
 .alt .anim.sm{border-radius:7px}
 .drill.drill-a{grid-template-columns:150px minmax(0,1fr)}
 .drill .anim.md{border-radius:7px}
@@ -270,7 +270,7 @@ textarea{width:100%;min-height:70px;resize:vertical}
 .page>*{min-width:0}
 .phead{display:flex;align-items:center;gap:10px;min-height:44px}
 .phead h1{font-size:1.55rem}
-.back{flex:none;width:42px;height:42px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface);color:var(--fg);font-size:1.25rem;cursor:pointer;display:grid;place-items:center}
+.backbtn{flex:none;width:42px;height:42px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface);color:var(--fg);font-size:1.25rem;cursor:pointer;display:grid;place-items:center}
 .tabbar{position:fixed;inset-inline:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:color-mix(in srgb,var(--surface) 94%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
 .tabbar button{font:inherit;background:none;border:0;color:var(--faint);display:grid;justify-items:center;gap:2px;padding:9px 2px 7px;font-size:.72rem;font-family:var(--display);font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .tabbar svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -1334,7 +1334,7 @@ footer{color:var(--faint);font-size:.82rem;padding-block:28px 0;border-top:1px s
 
 <!-- ===== الخطة ===== -->
 <section class="page" id="plan" aria-label="الخطة">
-  <header class="phead"><button type="button" class="back" data-go="more" aria-label="رجوع">→</button><h1>الخطة</h1></header>
+  <header class="phead"><button type="button" class="backbtn" data-go="more" aria-label="رجوع">→</button><h1>الخطة</h1></header>
   <div class="panel"><h3>الأسبوع</h3><div class="tbl"><table><thead><tr><th>اليوم</th><th>الحصة</th><th>التركيز</th><th>المدة</th></tr></thead><tbody><tr><th>السبت</th><td><a href="#s-UA" class="sess-link" data-sid="UA">الجزء العلوي A</a></td><td>صدر علوي + عرض الظهر</td><td>60–70 دقيقة</td></tr><tr><th>الأحد</th><td><a href="#s-LA" class="sess-link" data-sid="LA">الجزء السفلي A</a></td><td>فخذ أمامي + خلفي + سمانة</td><td>55–65 دقيقة</td></tr><tr class="rest"><th>الاتنين</th><td>راحة نشطة</td><td>مشي 30–45 دقيقة + إطالات</td><td>—</td></tr><tr><th>التلات</th><td><a href="#s-UB" class="sess-link" data-sid="UB">الجزء العلوي B</a></td><td>ظهر + صدر + ساعد</td><td>60–70 دقيقة</td></tr><tr><th>الأربع</th><td><a href="#s-LB" class="sess-link" data-sid="LB">الجزء السفلي B</a></td><td>فخذ أمامي + خلفي + سمانة</td><td>50–60 دقيقة</td></tr><tr><th>الخميس</th><td><a href="#s-AC" class="sess-link" data-sid="AC">الذراع + الكتف + السمانة</a></td><td>يوم إضافي اختياري — يبدأ من الأسبوع 3</td><td>35–45 دقيقة</td></tr><tr class="rest"><th>الجمعة</th><td>راحة نشطة</td><td>مشي 30–45 دقيقة + إطالات</td><td>—</td></tr></tbody></table></div><p class="hint">أول يوم كان الأربع 14 أكتوبر (حصة تعارف خفيفة)، وبعدها الجدول ده.</p></div>
   <div class="panel"><h3>يومك على شيفت الليل</h3><ol class="timeline"><li><time>4:30 م</time><div><b>الصحيان</b><span>اتعرّض لنور النهار 10–15 دقيقة (بلكونة أو مشي قصير) — بيظبط ساعتك البيولوجية وبيحسن نومك الصبح.</span></div></li><li><time>5:00 م</time><div><b>الوجبة 1</b><span>قبل التمرين بساعتين تقريبًا.</span></div></li><li><time>7:00 م</time><div><b>التمرين</b><span>60–70 دقيقة شامل الإحماء. في أيام الراحة: مشي 30–45 دقيقة في نفس الميعاد.</span></div></li><li><time>8:45 م</time><div><b>الوجبة 2</b><span>أكبر وجبة بروتين في اليوم بعد التمرين.</span></div></li><li><time>9:30 م</time><div><b>وقت حر + مشي</b><span>مشي 20–30 دقيقة لو لسه ما وصلتش هدف الخطوات.</span></div></li><li><time>12:00 ص</time><div><b>بداية الشغل</b><span>كل 45–60 دقيقة قوم دقيقتين: اتمشى، اشرب مية، اعمل إطالة الحوض.</span></div></li><li><time>2:00 ص</time><div><b>آخر كافيين</b><span>بعد كده مفيش قهوة ولا شاي ولا مشروبات طاقة عشان نومك.</span></div></li><li><time>3:00 ص</time><div><b>الوجبة 3</b><span>وجبة سهلة على المكتب.</span></div></li><li><time>7:30 ص</time><div><b>الوجبة 4</b><span>بعد ما تخلص الشغل. خفيفة عشان النوم.</span></div></li><li><time>8:30 ص</time><div><b>النوم</b><span>8 ساعات. أوضة ضلمة تمامًا (ستارة تعتيم أو قناع عين)، بارد، والموبايل صامت.</span></div></li></ol></div>
   <details class="fold"><summary>ليه 7 بالليل؟</summary><div class="fold-body"><p><b>ليه 7 بالليل وليس 1 بالليل أو 6 الصبح؟</b> الساعة 1 الجيم بيقفل 2، يعني ساعة واحدة بالإحماء — مش هتلحق تخلص الحصة، وكمان هتقطع أول الشغل. الساعة 6 الصبح هتبقى صاحي بقالك 13 ساعة وشغال 6 ساعات، فطاقتك أقل، والتمرين بيأخر نومك. الساعة 7 بالليل إنت صاحي بقالك ساعتين ونص، واكلت كويس، ومش مستعجل.</p><p><b>لو 7 بالليل مش ممكن خالص:</b> اختار 6 الصبح بدل 1 بالليل، وابدأ الشغل 10 بالليل بدل 12 عشان تخلص 6. بعد التمرين كُل الوجبة 2 ونام الساعة 8. باقي المواعيد تتأخر بنفس الفرق.</p></div></details>
@@ -1346,7 +1346,7 @@ footer{color:var(--faint);font-size:.82rem;padding-block:28px 0;border-top:1px s
 
 <!-- ===== الدليل ===== -->
 <section class="page" id="guide" aria-label="دليل التمرين">
-  <header class="phead"><button type="button" class="back" data-go="more" aria-label="رجوع">→</button><h1>دليل التمرين</h1></header>
+  <header class="phead"><button type="button" class="backbtn" data-go="more" aria-label="رجوع">→</button><h1>دليل التمرين</h1></header>
   <div class="panel"><h3>RIR — كام عدّة فاضلة؟</h3><p>بعد كل مجموعة اسأل نفسك: كنت أقدر أعمل كام عدّة كمان بفورم سليم؟</p><div class="tbl"><table><tbody><tr><td class="num big">0</td><td>مش قادر تعمل ولا عدّة كمان بفورم سليم (فشل). ما توصلّوش غير نادرًا في تمارين العزل.</td></tr><tr><td class="num big">1</td><td>كان فاضل عدّة واحدة.</td></tr><tr><td class="num big">2</td><td>كان فاضل عدتين — ده هدفك في معظم التمارين الأساسية.</td></tr><tr><td class="num big">3</td><td>كان فاضل 3 — مناسب لأول أسبوعين وللرومانيان.</td></tr><tr><td class="num big">4+</td><td>سهل — ده إحماء مش مجموعة شغل.</td></tr></tbody></table></div></div>
   <div class="panel"><h3>إزاي تختار الوزن وتزوده</h3><ul><li><b>الزيادة المزدوجة (Double Progression):</b> كل تمرين ليه مدى عدّات (مثلًا 8–12). ابدأ بوزن يخليك تعمل أقل المدى عند الـ RIR المطلوب. كل حصة حاول تزود عدّة. لما توصل لأعلى المدى في <u>كل</u> المجموعات بنفس الـ RIR، زوّد الوزن أصغر زيادة متاحة (1–2.5 كجم للدمبل، 2.5–5 كجم للبار والأجهزة) وارجع لأقل المدى.</li><li><b>مثال:</b> ضغط دمبل مائل 6–10: الأسبوع 3 عملت 22.5 كجم × 10، 9، 8. كمّل بنفس الوزن لحد ما تعمل 10، 10، 10 → الحصة اللي بعدها 25 كجم وهتنزل لـ 6–7 عدّات. ده الطبيعي.</li><li><b>أول حصة (اختيار الوزن):</b> اعمل مجموعتين إحماء (≈ 50% × 8 ثم 70% × 4–5). بعدها اختار وزن تتوقع تعمل بيه أعلى المدى وفاضلك 3–4 عدّات. لو عديت أعلى المدى بسهولة، زوّد في المجموعة اللي بعدها. ابدأ بحوالي 50–60% من أوزانك القديمة — القوة بترجع بسرعة، لكن الأوتار والمفاصل بتحتاج وقت أطول.</li><li><b>في الدايت:</b> ثبات الأوزان نفسه نجاح. أي زيادة في الأوزان أو العدّات معناها إنك بتحافظ على العضل أو بتبنيه.</li><li><b>لو وقفت 3 حصص ورا بعض في تمرين:</b> راجع النوم والأكل الأول. لو تمام: نزّل الوزن 10% وابني تاني، أو بدّله بالبديل بتاعه.</li><li><b>لو فوّت يوم:</b> كمّل بالترتيب (علوي A ← سفلي A ← علوي B ← سفلي B ← ذراع). ما تعملش حصتين في يوم.</li></ul></div>
   <div class="panel"><h3>تخفف الحمل إمتى؟</h3><p>أسبوع 8 تخفيف مخطط. خده بدري لو حصل حاجتين من دول:</p><ul><li>الأداء بينزل حصتين ورا بعض في معظم التمارين.</li><li>وجع مفاصل أو ضهر بيزيد ومش بيروح بعد يوم.</li><li>نومك وحش أسبوع كامل أو إرهاق مستمر.</li><li>مش طايق تروح الجيم أكتر من أسبوع.</li></ul></div>
@@ -1355,7 +1355,7 @@ footer{color:var(--faint);font-size:.82rem;padding-block:28px 0;border-top:1px s
 
 <!-- ===== المشتريات ===== -->
 <section class="page" id="shopping" aria-label="المشتريات">
-  <header class="phead"><button type="button" class="back" data-go="more" aria-label="رجوع">→</button><h1>المشتريات</h1></header>
+  <header class="phead"><button type="button" class="backbtn" data-go="more" aria-label="رجوع">→</button><h1>المشتريات</h1></header>
   <div class="strip">
     <div><b class="num">≈ 1,090</b><span>ج/أسبوع</span></div>
     <div><b class="num">≈ 4,700</b><span>ج/شهر</span></div>
@@ -1368,7 +1368,7 @@ footer{color:var(--faint);font-size:.82rem;padding-block:28px 0;border-top:1px s
 
 <!-- ===== الأمان ===== -->
 <section class="page" id="safety" aria-label="الضهر والأمان">
-  <header class="phead"><button type="button" class="back" data-go="more" aria-label="رجوع">→</button><h1>الضهر والأمان</h1></header>
+  <header class="phead"><button type="button" class="backbtn" data-go="more" aria-label="رجوع">→</button><h1>الضهر والأمان</h1></header>
   <p class="hint">ده مش تشخيص. الخطة معمولة على إن الوجع خفيف وبيروح وييجي.</p>
   <div class="note-danger"><b>وقّف التمرين وروح لدكتور لو حصل أي حاجة من دول:</b><ul style="margin-top:8px"><li>ألم نازل على الرجل تحت الركبة</li><li>تنميل أو وخز في الرجل أو القدم</li><li>ضعف في الرجل أو صعوبة ترفع مشط رجلك</li><li>مشكلة في التحكم في البول أو البراز، أو تنميل حوالين منطقة الحوض (طوارئ)</li><li>حرارة أو نزول وزن من غير سبب مع ألم الضهر</li><li>ألم شديد بالليل مش بيهدى بالراحة</li><li>ألم مستمر أكتر من 3–4 أسابيع رغم تعديل التمرين (روح لأخصائي علاج طبيعي)</li></ul></div>
   <div class="panel"><ul><li><b>مقياس الألم (0–10):</b> لو الألم وقت التمرين 3/10 أو أقل ورجع لطبيعته الصبح اللي بعده — كمّل. لو أكتر من 3 أو زاد تاني يوم — قلل الوزن أو المدى أو استخدم البديل.</li><li><b>شد البطن (Bracing):</b> قبل كل عدّة في التمارين الأساسية: خد نفس، واشد بطنك كأن حد هيضربك فيها، وطلّع النفس مع الدفع.</li><li><b>اختيار التمارين:</b> البرنامج ما فيهوش ديدلفت تقليدي ولا سكوات بار حر في البداية. الرجل بتتبني بالليج برس والهاك والسبليت سكوات، وده بيقلل الحمل على أسفل ضهرك.</li><li><b>القعدة 8 ساعات:</b> كرسي بمسند لأسفل الضهر، الشاشة في مستوى عينك، وقوم كل 45–60 دقيقة. إطالة مثنيات الحوض يوميًا.</li><li><b>ديد باج وبلانك:</b> موجودين في أيام الرجل لتقوية الجذع. تقدر تعملهم في البيت أيام الراحة كمان.</li></ul></div>
@@ -1376,7 +1376,7 @@ footer{color:var(--faint);font-size:.82rem;padding-block:28px 0;border-top:1px s
 
 <!-- ===== البيانات ===== -->
 <section class="page" id="data" aria-label="بياناتك">
-  <header class="phead"><button type="button" class="back" data-go="more" aria-label="رجوع">→</button><h1>بياناتك</h1></header>
+  <header class="phead"><button type="button" class="backbtn" data-go="more" aria-label="رجوع">→</button><h1>بياناتك</h1></header>
   <div class="panel"><label class="fl" for="startDate">تاريخ بداية البرنامج<input type="date" id="startDate"></label></div>
   <div class="panel data-box">
     <p id="storeInfo">كل اللي بتسجله بيتحفظ على الجهاز والمتصفح ده بس. خد نسخة احتياطية كل أسبوع.</p>
