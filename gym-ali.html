@@ -442,7 +442,9 @@ input[type=number]{-moz-appearance:textfield}
 <!-- ===================== TODAY ===================== -->
 <section class="page" id="today" aria-label="النهارده">
   <header class="phead home"><div class="brand"><i>ع</i><span id="todayDate">برنامج علي · 12 أسبوع</span></div></header>
+  <div id="syncBanner" class="note-warn" hidden>علشان Claude يقدر يشوف ويسجّل أكلك ووزنك وتمرينك، افتح البرنامج من نسخة Claude: <a href="https://claude.ai/artifact/5kUXZcvXbexnbKcbYDNynb" target="_blank" rel="noopener">افتح نسخة Claude</a>. انقل بياناتك الأول من «المزيد ← الإعدادات ← انسخ النسخة الاحتياطية» والصقها هناك.</div>
   <div id="resumeBox"></div>
+  <div id="coachBox"></div>
   <div class="hero-card" id="heroCard">
     <div><p class="eyebrow" id="t-week">الأسبوع —</p><h2 id="t-day">النهارده</h2><p class="sub" id="t-sub"></p></div>
     <div class="btn-row" id="t-actions"></div>
@@ -1776,7 +1778,7 @@ const fmt=n=>Math.round(n).toLocaleString('en-US');
 const r1=n=>Math.round(n*10)/10;
 
 // ================= state =================
-function blank(){return {v:2,start:'2026-10-14',settings:{gym:'19:00',goal:null,sound:true,area:'',budget:'100–150'},log:{},extra:{},days:{},meas:{},notes:{},moves:{},workouts:{},live:null,shop:{},updatedAt:0};}
+function blank(){return {v:2,start:'2026-10-14',settings:{gym:'19:00',goal:null,sound:true,area:'',budget:'100–150'},log:{},extra:{},coach:[],days:{},meas:{},notes:{},moves:{},workouts:{},live:null,shop:{},updatedAt:0};}
 let S=blank();
 try{const raw=localStorage.getItem(KEY); if(raw){S=migrate(JSON.parse(raw));}}catch(e){}
 function idxOfDate(d){return (d.getDay()+1)%7;}
@@ -1807,7 +1809,7 @@ function migrate(o){
 let db=null, uid=null, writing=false, pending=false, timer=null;
 function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function setState(t){const el=$('#saveState'); if(el) el.textContent=t;}
-function touch(){S.updatedAt=Date.now(); saveLocal(); setState('اتحفظ ✓'); if(db&&uid){clearTimeout(timer); timer=setTimeout(pushCloud,1500);}}
+function touch(){S.updatedAt=Date.now(); S.by='app'; saveLocal(); setState('اتحفظ ✓'); if(db&&uid){clearTimeout(timer); timer=setTimeout(pushCloud,1500);}}
 async function pushCloud(){if(writing){pending=true;return;} writing=true;
   try{await db.doc('data/users/'+uid+'/tracker').set(JSON.parse(JSON.stringify(S))); setState('اتحفظ ✓ (متزامن مع حسابك)');}catch(e){setState('اتحفظ على الجهاز بس');}
   writing=false; if(pending){pending=false; pushCloud();}}
@@ -1816,7 +1818,10 @@ async function pushCloud(){if(writing){pending=true;return;} writing=true;
   const snap=await db.doc('data/users/'+uid+'/tracker').get();
   if(snap.exists){const c=snap.data(); if((c.updatedAt||0)>(S.updatedAt||0)){S=migrate(JSON.parse(JSON.stringify(c))); saveLocal(); renderAll();} else if((S.updatedAt||0)>(c.updatedAt||0)) pushCloud();}
   else if(S.updatedAt) pushCloud();
-  setState('متزامن مع حسابك');}catch(e){}})();
+  setState('متزامن مع حسابك — Claude يقدر يشوفه');
+  const sb=$('#syncBanner'); if(sb) sb.hidden=true; const si=$('#storeInfo'); if(si) si.textContent='بياناتك بتتحفظ في حسابك على Claude (خاصة بيك) وعلى الجهاز ده. لما تقول لـ Claude إنك أكلت أو اتوزنت أو اتمرنت، بيسجلها هنا، وبتظهر عندك لوحدها.';
+  db.doc('data/users/'+uid+'/tracker').onSnapshot(sn=>{try{ if(!sn.exists||sn.metadata.hasPendingWrites) return; const c=sn.data(); if((c.updatedAt||0)>(S.updatedAt||0)){ S=migrate(JSON.parse(JSON.stringify(c))); saveLocal(); if(!liveOpen) renderAll(); if(c.by==='claude') toast('Claude حدّث بياناتك'+(c.byNote?': '+c.byNote:'')); } }catch(e){} },()=>{});
+  }catch(e){}})();
 
 // ================= dates & schedule =================
 function effNow(){return new Date(Date.now()-10*3600*1000);} // your day flips at 10 AM (you're asleep)
@@ -1875,6 +1880,9 @@ function renderToday(){
     btn('تمرين بيت خفيف (اختياري)','',()=>go('guide'));
   }
   renderOffBox(t);
+  // coach notes from Claude
+  const cb=$('#coachBox'), cn=(S.coach||[]).slice().sort((a,b)=>(b.d||'').localeCompare(a.d||''));
+  cb.innerHTML=cn.length?'<div class="panel"><h3>ملاحظات Claude</h3><p><small class="hint">'+esc(cn[0].d||'')+'</small><br>'+esc(cn[0].t||'').replace(/\n/g,'<br>')+'</p>'+(cn.length>1?'<details class="fold"><summary>الملاحظات القديمة ('+(cn.length-1)+')</summary><div class="fold-body">'+cn.slice(1,15).map(n=>'<p><small class="hint">'+esc(n.d||'')+'</small><br>'+esc(n.t||'').replace(/\n/g,'<br>')+'</p>').join('')+'</div></details>':'')+'</div>':'';
   // resume
   const rb=$('#resumeBox'); rb.innerHTML='';
   if(S.live&&!liveOpen){const s=sess(S.live.sid); rb.innerHTML='<div class="resume"><div><b>عندك تمرين مفتوح</b><br><small>'+esc(s?s.title:'')+'</small></div><button type="button" class="btn pri" id="resumeBtn">كمّل</button></div>'; $('#resumeBtn').onclick=()=>openLive();}
@@ -1896,7 +1904,8 @@ function renderToday(){
   const ex=$('#t-extra'); ex.innerHTML=(d.food||[]).map(f=>'<div class="li"><div class="grow"><b>'+esc(f.n)+'</b><small>'+fmt(f.k)+' سعر · '+fmt(f.p)+' جم بروتين</small></div></div>').join('');
 }
 function setMeter(sel,frac){const b=$(sel); if(!b) return; b.classList.toggle('over',frac>1.05); b.firstElementChild.style.width=Math.min(100,Math.max(0,frac*100))+'%';}
-$('#t-weight').addEventListener('change',e=>{const v=parseFloat(e.target.value), t=todayStr(); if(isNaN(v)) delete day(t).w; else day(t).w=v; touch(); renderToday(); renderBody();});
+function nowHM(){const d=new Date(); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+$('#t-weight').addEventListener('change',e=>{const v=parseFloat(e.target.value), t=todayStr(); if(isNaN(v)){delete day(t).w; delete day(t).wt;} else {day(t).w=v; day(t).wt=nowHM();} touch(); renderToday(); renderBody();});
 $('#t-steps').addEventListener('change',e=>{const v=parseInt(e.target.value,10), t=todayStr(); if(isNaN(v)) delete day(t).st; else day(t).st=v; touch(); renderToday();});
 
 // ================= SWAP TODAY'S WORKOUT =================
@@ -2138,11 +2147,11 @@ function renderBody(){
   const g=S.settings.goal, ge=$('#goalEta');
   if(g&&tr.now){const diff=tr.now-g; if(diff<=0) ge.textContent='وصلت هدفك.'; else if(tr.rate!=null&&tr.rate<-0.05){const wks=diff/(-tr.rate); const d=new Date(); d.setDate(d.getDate()+Math.round(wks*7)); ge.textContent='بالمعدل الحالي: حوالي '+Math.ceil(wks)+' أسبوع ('+d.getDate()+'/'+(d.getMonth()+1)+'). تقدير بيتغير.';} else ge.textContent='فاضل '+diff.toFixed(1)+' كجم. محتاج أسبوعين وزن علشان أقدّر الوقت.';} else ge.textContent='';
   if(!$('#wDate').value) $('#wDate').value=todayStr();
-  const ws=weights().slice(-10).reverse(); $('#wList').innerHTML=ws.map(([k,v])=>'<div class="li"><div class="grow"><b class="num">'+v.toFixed(1)+' كجم</b><small>'+AR_DAYS[idxOfDate(pd(k))]+' '+pd(k).getDate()+'/'+(pd(k).getMonth()+1)+'</small></div><button type="button" class="x" data-wdel="'+k+'" aria-label="امسح">✕</button></div>').join('')||'<p class="hint">لسه مفيش أوزان.</p>';
+  const ws=weights().slice(-10).reverse(); $('#wList').innerHTML=ws.map(([k,v])=>'<div class="li"><div class="grow"><b class="num">'+v.toFixed(1)+' كجم</b><small>'+AR_DAYS[idxOfDate(pd(k))]+' '+pd(k).getDate()+'/'+(pd(k).getMonth()+1)+(S.days[k].wt?' · الساعة '+S.days[k].wt:'')+'</small></div><button type="button" class="x" data-wdel="'+k+'" aria-label="امسح">✕</button></div>').join('')||'<p class="hint">لسه مفيش أوزان.</p>';
   $$('#wList [data-wdel]').forEach(b=>b.onclick=()=>{delete S.days[b.dataset.wdel].w; touch(); renderBody(); renderToday();});
   renderMeas(); renderSummary();
 }
-$('#wAdd').onclick=()=>{const k=$('#wDate').value, v=parseFloat($('#wVal').value); if(!k||isNaN(v)){toast('اختار اليوم واكتب الوزن'); return;} day(k).w=v; $('#wVal').value=''; touch(); renderBody(); renderToday(); toast('اتسجل');};
+$('#wAdd').onclick=()=>{const k=$('#wDate').value, v=parseFloat($('#wVal').value); if(!k||isNaN(v)){toast('اختار اليوم واكتب الوزن'); return;} day(k).w=v; if(k===todayStr()) day(k).wt=nowHM(); $('#wVal').value=''; touch(); renderBody(); renderToday(); toast('اتسجل');};
 $('#goalW').addEventListener('change',e=>{const v=parseFloat(e.target.value); S.settings.goal=isNaN(v)?null:v; touch(); renderBody();});
 function drawWeight(tr){const svg=$('#wChart'), W=360,H=180,L=36,R=10,T=12,B=24; if(!tr.pts.length){svg.innerHTML='<text x="180" y="90" text-anchor="middle">سجّل وزنك علشان الرسم يظهر</text>'; return;}
   const t0=pd(S.start), tEnd=new Date(t0); tEnd.setDate(tEnd.getDate()+84); const last=pd(tr.pts[tr.pts.length-1][0]); const span=Math.max(14,Math.min(84,Math.round((last-t0)/86400000)+7));
@@ -2258,6 +2267,7 @@ $('#startDate').addEventListener('change',e=>{if(e.target.value){S.start=e.targe
 $('#sSound').onclick=()=>{S.settings.sound=!S.settings.sound; touch(); renderSettings(); if(S.settings.sound){initAudio(); beep();}};
 function renderSettings(){$('#sGym').value=S.settings.gym||'19:00'; $('#startDate').value=S.start; $('#sSound').setAttribute('aria-pressed',S.settings.sound?'true':'false'); $('#sSound').textContent=S.settings.sound?'شغال':'مقفول'; $('#oArea').value=S.settings.area||''; $('#oBudget').value=S.settings.budget||'';}
 const framed=(function(){try{return window.self!==window.top;}catch(e){return true;}})();
+if(!window.claude){const sbn=$('#syncBanner'); if(sbn) sbn.hidden=false;}
 if(!framed) $('#dlBtn').hidden=false;
 $('#dlBtn').onclick=()=>{const b=new Blob([JSON.stringify(S)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='ali-fit-backup-'+todayStr()+'.json'; a.click();};
 function msg(t){$('#dataMsg').textContent=t;}
